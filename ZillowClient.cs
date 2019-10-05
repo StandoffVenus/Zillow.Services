@@ -5,10 +5,7 @@ namespace Zillow.Services
     using System;
     using System.Collections;
     using System.Diagnostics;
-    using System.IO;
-    using System.Net.Http;
     using System.Web;
-    using System.Xml.Serialization;
     using Zillow.Services.Schema;
 
     #endregion
@@ -33,11 +30,11 @@ namespace Zillow.Services
         {
             get
             {
-                if (_zwsid == string.Empty)
+                if(_zwsid == string.Empty)
                     throw new Exception("Zillow Web Service Identifier Not Set!");
                 return _zwsid;
             }
-            private set { _zwsid = value; }
+            private set => _zwsid = value;
         }
 
         #endregion
@@ -51,7 +48,7 @@ namespace Zillow.Services
         public ZillowClient(string zwsid)
         {
 
-            if (string.IsNullOrEmpty(zwsid))
+            if(string.IsNullOrEmpty(zwsid))
                 throw new ArgumentException("Zillow ID API access key is required", "zwsid");
 
             Zwsid = zwsid;
@@ -65,7 +62,7 @@ namespace Zillow.Services
         {
             var query = HttpUtility.ParseQueryString(string.Empty);
 
-            foreach (string k in parameters.Keys)
+            foreach(string k in parameters.Keys)
                 query[k] = parameters[k].ToString();
 
             return query.ToString();
@@ -78,7 +75,7 @@ namespace Zillow.Services
             {
                 return CallAPIAsync<T>(uri, parameters).Result;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message, ex);
                 throw ex;
@@ -93,24 +90,24 @@ namespace Zillow.Services
         {
             try
             {
-                Hashtable p = new Hashtable
+                var p = new Hashtable
                 {
                     {"zws-id", Zwsid},
                     {"address", address},
                     {"citystatezip", citystatezip}
                 };
 
-                searchresults search = CallAPI<searchresults>(ZillowURI.SearchResults, p);
+                var search = CallAPI<searchresults>(ZillowURI.SearchResults, p);
 
-                if (search == null)
+                if(search == null)
                     throw new NullReferenceException("searchresults API value is null");
 
-                if (int.Parse(search.message.code) != 0)
+                if(int.Parse(search.message.code) != 0)
                     throw new Exception(string.Format("Zillow Error #{0}: {1}", search.message.code, search.message.text));
 
                 return search;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;
@@ -121,23 +118,23 @@ namespace Zillow.Services
         {
             try
             {
-                Hashtable p = new Hashtable
+                var p = new Hashtable
                 {
                     {"zws-id", Zwsid},
                     {"zpid", zpid}
                 };
 
-                zestimateResultType zestimate = CallAPI<zestimateResultType>(ZillowURI.ZEstimate, p);
+                var zestimate = CallAPI<zestimateResultType>(ZillowURI.ZEstimate, p);
 
-                if (zestimate == null)
+                if(zestimate == null)
                     throw new NullReferenceException("zestimateResultType API value is null");
 
-                if (int.Parse(zestimate.message.code) != 0)
+                if(int.Parse(zestimate.message.code) != 0)
                     throw new Exception(string.Format("Zillow Error #{0}: {1}", zestimate.message.code, zestimate.message.text));
 
                 return zestimate;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;
@@ -148,7 +145,7 @@ namespace Zillow.Services
         {
             try
             {
-                Hashtable p = new Hashtable
+                var p = new Hashtable
                 {
                     {"zws-id", Zwsid},
                     {"zpid", zpid},
@@ -157,17 +154,17 @@ namespace Zillow.Services
                     {"height", height}
                 };
 
-                chart c = CallAPI<chart>(ZillowURI.Chart, p);
+                var c = CallAPI<chart>(ZillowURI.Chart, p);
 
-                if (c == null)
+                if(c == null)
                     throw new NullReferenceException("chart API value is null");
 
-                if (int.Parse(c.message.code) != 0)
+                if(int.Parse(c.message.code) != 0)
                     throw new Exception(string.Format("Zillow Error #{0}: {1}", c.message.code, c.message.text));
 
                 return c;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;
@@ -178,24 +175,24 @@ namespace Zillow.Services
         {
             try
             {
-                Hashtable p = new Hashtable
+                var p = new Hashtable
                 {
                     {"zws-id", Zwsid},
                     {"zpid", zpid},
                     {"count", count}
                 };
 
-                comps c = CallAPI<comps>(ZillowURI.Comps, p);
+                var c = CallAPI<comps>(ZillowURI.Comps, p);
 
-                if (c == null)
+                if(c == null)
                     throw new NullReferenceException("comps API value is null");
 
-                if (int.Parse(c.message.code) != 0)
+                if(int.Parse(c.message.code) != 0)
                     throw new Exception(string.Format("Zillow Error #{0}: {1}", c.message.code, c.message.text));
 
                 return c;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;
@@ -206,7 +203,7 @@ namespace Zillow.Services
         {
             try
             {
-                Hashtable p = new Hashtable
+                var p = new Hashtable
                 {
                     {"zws-id", Zwsid},
                     {"city", city},
@@ -220,17 +217,17 @@ namespace Zillow.Services
                     {"chartVariant", chartVariant}
                 };
 
-                regionchart c = CallAPI<regionchart>(ZillowURI.RegionChart, p);
+                var c = CallAPI<regionchart>(ZillowURI.RegionChart, p);
 
-                if (c == null)
+                if(c == null)
                     throw new NullReferenceException("regionchart API value is null");
 
-                if (int.Parse(c.message.code) != 0)
+                if(int.Parse(c.message.code) != 0)
                     throw new Exception(string.Format("Zillow Error #{0}: {1}", c.message.code, c.message.text));
 
                 return c;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;
@@ -241,7 +238,7 @@ namespace Zillow.Services
         {
             try
             {
-                Hashtable p = new Hashtable
+                var p = new Hashtable
                 {
                     {"zws-id", Zwsid},
                     {"rid", rid},
@@ -250,17 +247,17 @@ namespace Zillow.Services
                     {"neighborhood", neighborhood}
                 };
 
-                demographicsResultType demo = CallAPI<demographicsResultType>(ZillowURI.DemoGraphics, p);
+                var demo = CallAPI<demographicsResultType>(ZillowURI.DemoGraphics, p);
 
-                if (demo == null)
+                if(demo == null)
                     throw new NullReferenceException("demographicsResultType API value is null");
 
-                if (int.Parse(demo.message.code) != 0)
+                if(int.Parse(demo.message.code) != 0)
                     throw new Exception(string.Format("Zillow Error #{0}: {1}", demo.message.code, demo.message.text));
 
                 return demo;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;
@@ -271,7 +268,7 @@ namespace Zillow.Services
         {
             try
             {
-                Hashtable p = new Hashtable
+                var p = new Hashtable
                 {
                     {"zws-id", Zwsid},
                     {"regionid", regionid},
@@ -280,17 +277,17 @@ namespace Zillow.Services
                     {"childtype", childtype}
                 };
 
-                regionchildrenResultType rc = CallAPI<regionchildrenResultType>(ZillowURI.RegionChildren, p);
+                var rc = CallAPI<regionchildrenResultType>(ZillowURI.RegionChildren, p);
 
-                if (rc == null)
+                if(rc == null)
                     throw new NullReferenceException("regionchildrenResultType API value is null");
 
-                if (int.Parse(rc.message.code) != 0)
+                if(int.Parse(rc.message.code) != 0)
                     throw new Exception(string.Format("Zillow Error #{0}: {1}", rc.message.code, rc.message.text));
 
                 return rc;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;
@@ -301,7 +298,7 @@ namespace Zillow.Services
         {
             try
             {
-                Hashtable p = new Hashtable
+                var p = new Hashtable
                 {
                     {"zws-id", Zwsid},
                     {"state", state},
@@ -309,17 +306,17 @@ namespace Zillow.Services
                     {"callback", callback}
                 };
 
-                rateSummaryResultType rs = CallAPI<rateSummaryResultType>(ZillowURI.RateSummary, p);
+                var rs = CallAPI<rateSummaryResultType>(ZillowURI.RateSummary, p);
 
-                if (rs == null)
+                if(rs == null)
                     throw new NullReferenceException("rateSummaryResultType API value is null");
 
-                if (int.Parse(rs.message.code) != 0)
+                if(int.Parse(rs.message.code) != 0)
                     throw new Exception(string.Format("Zillow Error #{0}: {1}", rs.message.code, rs.message.text));
 
                 return rs;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;
@@ -330,7 +327,7 @@ namespace Zillow.Services
         {
             try
             {
-                Hashtable p = new Hashtable
+                var p = new Hashtable
                 {
                     {"zws-id", Zwsid},
                     {"price", price},
@@ -341,17 +338,17 @@ namespace Zillow.Services
                     {"callback", callback}
                 };
 
-                paymentsSummaryResultType ps = CallAPI<paymentsSummaryResultType>(ZillowURI.RegionChildren, p);
+                var ps = CallAPI<paymentsSummaryResultType>(ZillowURI.RegionChildren, p);
 
-                if (ps == null)
+                if(ps == null)
                     throw new NullReferenceException("paymentsSummaryResultType API value is null");
 
-                if (int.Parse(ps.message.code) != 0)
+                if(int.Parse(ps.message.code) != 0)
                     throw new Exception(string.Format("Zillow Error #{0}: {1}", ps.message.code, ps.message.text));
 
                 return ps;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;
@@ -362,24 +359,24 @@ namespace Zillow.Services
         {
             try
             {
-                Hashtable p = new Hashtable
+                var p = new Hashtable
                 {
                     {"zws-id", Zwsid},
                     {"address", address},
                     {"citystatezip", citystatezip}
                 };
 
-                searchresults search = CallAPI<searchresults>(ZillowURI.DeepSearchResults, p);
+                var search = CallAPI<searchresults>(ZillowURI.DeepSearchResults, p);
 
-                if (search == null)
+                if(search == null)
                     throw new NullReferenceException("searchresults API value is null");
 
-                if (int.Parse(search.message.code) != 0)
+                if(int.Parse(search.message.code) != 0)
                     throw new Exception(string.Format("Zillow Error #{0}: {1}", search.message.code, search.message.text));
 
                 return search;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;
@@ -390,24 +387,24 @@ namespace Zillow.Services
         {
             try
             {
-                Hashtable p = new Hashtable
+                var p = new Hashtable
                 {
                     {"zws-id", Zwsid},
                     {"zpid", zpid},
                     {"count", count}
                 };
 
-                comps comps = CallAPI<comps>(ZillowURI.DeepComps, p);
+                var comps = CallAPI<comps>(ZillowURI.DeepComps, p);
 
-                if (comps == null)
+                if(comps == null)
                     throw new NullReferenceException("searchresults API value is null");
 
-                if (int.Parse(comps.message.code) != 0)
+                if(int.Parse(comps.message.code) != 0)
                     throw new Exception(string.Format("Zillow Error #{0}: {1}", comps.message.code, comps.message.text));
 
                 return comps;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;
@@ -418,23 +415,23 @@ namespace Zillow.Services
         {
             try
             {
-                Hashtable p = new Hashtable
+                var p = new Hashtable
                 {
                     {"zws-id", Zwsid},
                     {"zpid", zpid}
                 };
 
-                updatedPropertyDetails upd = CallAPI<updatedPropertyDetails>(ZillowURI.UpdatedPropertyDetails, p);
+                var upd = CallAPI<updatedPropertyDetails>(ZillowURI.UpdatedPropertyDetails, p);
 
-                if (upd == null)
+                if(upd == null)
                     throw new NullReferenceException("searchresults API value is null");
 
-                if (int.Parse(upd.message.code) != 0)
+                if(int.Parse(upd.message.code) != 0)
                     throw new Exception(string.Format("Zillow Error #{0}: {1}", upd.message.code, upd.message.text));
 
                 return upd;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;

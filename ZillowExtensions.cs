@@ -10,10 +10,10 @@ namespace Zillow.Services
 
         public static string GetXmlName(SimpleChartDuration duration)
         {
-            Type d = duration.GetType();
-            FieldInfo info = d.GetField(duration.ToString("G"));
+            var d = duration.GetType();
+            var info = d.GetField(duration.ToString("G"));
 
-            if (!info.IsDefined(typeof(XmlEnumAttribute), false))
+            if(!info.IsDefined(typeof(XmlEnumAttribute), false))
                 return duration.ToString();
 
             var att = info.GetCustomAttribute<XmlEnumAttribute>(false);

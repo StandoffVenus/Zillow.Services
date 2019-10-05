@@ -1,3 +1,7 @@
 /obj/**/*.*
 /bin/**/*.*
 /Zillow.Services.csproj.user
+/.vs/Zillow.Services/DesignTimeBuild
+/.vs/Zillow.Services/v16/Server/sqlite3
+*.suo
+/.vs

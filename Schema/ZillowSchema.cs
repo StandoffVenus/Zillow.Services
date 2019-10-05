@@ -35,14 +35,8 @@ namespace Zillow.Services.Schema
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public compsRequest request
         {
-            get
-            {
-                return this.requestField;
-            }
-            set
-            {
-                this.requestField = value;
-            }
+            get => this.requestField;
+            set => this.requestField = value;
         }
 
         /// <remarks/>
