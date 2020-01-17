@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Xml.Serialization;
 using Zillow.Services.Schema;
 
@@ -12,24 +11,22 @@ namespace Zillow.Services
 {
     public partial class ZillowClient : IZillowClient
     {
+        private static readonly HttpClient HttpClient = new HttpClient();
+
 
         private async Task<T> CallAPIAsync<T>(string uri, Hashtable parameters)
         {
             try
             {
-                // Build HttpClient request
-                using (var httpClient = new HttpClient())
+                // Read XML and Deserialize Object
+                var u = new UriBuilder(uri)
                 {
-                    // Read XML and Deserialize Object
-                    var u = new UriBuilder(uri)
-                    {
-                        Query = PrepareQuery(parameters)
-                    };
-                    var xml = await httpClient.GetStringAsync(u.Uri);
+                    Query = PrepareQuery(parameters)
+                };
+                var xml = await ZillowClient.HttpClient.GetStringAsync(u.Uri);
 
-                    XmlSerializer ser = new XmlSerializer(typeof(T));
-                    return (T)ser.Deserialize(new StringReader(xml));
-                }
+                XmlSerializer ser = new XmlSerializer(typeof(T));
+                return (T)ser.Deserialize(new StringReader(xml));
 
             }
             catch (Exception ex)
